@@ -163,9 +163,7 @@ FOFA_KEY=
 
 检查结果会区分未配置、缺少 Key、缺少外部程序、配置存在但尚未连接等状态。`--check` 不启动 MCP；只有主程序完成握手、`tools/list` 并报告连接成功后，工具才会交给 Agent。
 
-## 测试与验证
-
-### 自动化测试
+## 测试
 
 当前版本的 CLI、配置、Agent streaming、多轮上下文、RAG、MCP 管理、输出规范化及四类 MCP 适配逻辑已纳入完整测试套件。发布前实际运行结果为 `85 passed`。可执行：
 
@@ -175,26 +173,6 @@ set UV_CACHE_DIR=%CD%\.cache\uv
 .venv\Scripts\python.exe -m compileall -q main.py gasecagent tests
 .venv\Scripts\python.exe -m pytest -q
 ```
-
-### 真实 MCP 协议与工具调用
-
-- Filesystem：真实 stdio 握手、工具发现、列目录、创建、读取、修改文件，以及阻止访问 `workspace` 外部路径。
-- Fscan：真实 stdio 握手、`fscan_scan` schema、参数处理、缺少二进制及错误回传。
-- Tavily：官方 MCP 真实 stdio 握手和 5 个工具 schema 发现。
-- FOFA：真实 stdio 握手、工具发现、结果与 Tool Error 回传。
-
-### 本地替身环境测试
-
-- Fscan 使用 Mock 子进程验证命令参数、超时、隔离结果文件和 Tool Result 契约；这不是一次真实扫描。
-- FOFA 使用本地 HTTP Server 验证请求编码、结构化结果和 API 错误处理；这不是官方 FOFA 在线查询。
-- Agent 使用 ScriptedModel 验证 streaming、工具事件和多轮上下文；这不是公网 LLM 调用。
-
-### 待外部环境验收
-
-- 使用用户自己的凭据完成 LLM、Embedding、Tavily 和 FOFA 官方在线调用。
-- 在明确授权且隔离的测试环境中执行真实 Fscan 扫描。
-
-Fscan 二进制不随仓库分发。项目核验过的 v2.2.0 Windows x64 文件哈希与上游发布记录一致，但本机 Defender 将其识别为 HackTool；项目未关闭防护、添加排除项、强制恢复或执行该文件。哈希一致不等于安全背书。
 
 ## License
 
