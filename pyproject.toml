@@ -1,0 +1,40 @@
+[project]
+name = "gasecagent"
+version = "0.1.0"
+description = "基于 LLM、RAG 与 MCP 的中文自动化安全渗透 Agent"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = "MIT"
+authors = [
+    { name = "GAlun", email = "203663384+Butler12345@users.noreply.github.com" },
+]
+keywords = ["agent", "mcp", "rag", "security", "cybersecurity"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Chinese (Simplified)",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "httpx==0.28.1",
+    "mcp==1.30.0",
+    "numpy==2.3.5",
+    "openai==3.19.0",
+    "openai-agents==0.22.3",
+    "python-dotenv==1.2.3",
+    "rich==15.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

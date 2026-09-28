@@ -1,0 +1,82 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "description": "官方 Filesystem MCP；默认仅允许访问项目 workspace 目录",
+      "enabled": true,
+      "transport": "stdio",
+      "command": "node",
+      "args": [
+        "${GA_FILESYSTEM_MCP_ENTRY}",
+        "${GA_FILESYSTEM_ROOT}"
+      ],
+      "cwd": "${PROJECT_ROOT}",
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "requiredFiles": [
+        "${GA_FILESYSTEM_MCP_ENTRY}"
+      ],
+      "requiredDirectories": [
+        "${GA_FILESYSTEM_ROOT}"
+      ],
+      "cacheToolsList": true,
+      "clientSessionTimeoutSeconds": 30
+    },
+    "fscan": {
+      "description": "Fscan stdio 适配器；需另行配置可信的 fscan 二进制与 SHA-256",
+      "enabled": true,
+      "transport": "stdio",
+      "command": "${PROJECT_ROOT}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "gasecagent.mcp_servers.fscan"
+      ],
+      "cwd": "${PROJECT_ROOT}",
+      "env": {
+        "GA_FSCAN_BINARY": "${GA_FSCAN_BINARY}",
+        "GA_FSCAN_SHA256": "${GA_FSCAN_SHA256}",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "requiredFiles": [
+        "${GA_FSCAN_BINARY}"
+      ],
+      "cacheToolsList": true,
+      "clientSessionTimeoutSeconds": 30
+    },
+    "tavily-search": {
+      "description": "Tavily 官方 MCP；需配置 TAVILY_API_KEY",
+      "enabled": true,
+      "transport": "stdio",
+      "command": "node",
+      "args": [
+        "${GA_TAVILY_MCP_ENTRY}"
+      ],
+      "cwd": "${PROJECT_ROOT}",
+      "env": {
+        "TAVILY_API_KEY": "${TAVILY_API_KEY}"
+      },
+      "requiredFiles": [
+        "${GA_TAVILY_MCP_ENTRY}"
+      ],
+      "cacheToolsList": true,
+      "clientSessionTimeoutSeconds": 30
+    },
+    "fofa": {
+      "description": "GAsecAgent FOFA stdio 适配器；需配置 FOFA_KEY",
+      "enabled": true,
+      "transport": "stdio",
+      "command": "${PROJECT_ROOT}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "gasecagent.mcp_servers.fofa"
+      ],
+      "cwd": "${PROJECT_ROOT}",
+      "env": {
+        "FOFA_KEY": "${FOFA_KEY}",
+        "PYTHONIOENCODING": "utf-8"
+      },
+      "cacheToolsList": true,
+      "clientSessionTimeoutSeconds": 30
+    }
+  }
+}

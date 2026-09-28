@@ -1,0 +1,51 @@
+# Python caches and build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+mcp.json
+
+# Internal development records (kept outside the public repository)
+/PROJECT_STATUS.md
+/*-PROJECT_STATUS.md
+/docs/DEVELOPMENT_PHASES.md
+/GAsecAgent_终极开发Prompt_阶段式开发版.md
+
+# Runtime output
+*.log
+logs/
+.coverage
+htmlcov/
+.cache/
+
+# Downloaded third-party source snapshots (see docs/DEPENDENCIES.md)
+.external/
+node_modules/
+
+# Agent 可读写工作目录；只保留目录占位文件
+workspace/*
+!workspace/.gitkeep
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# External tools and binaries are installed locally, not committed
+tools/
+*.exe
