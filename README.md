@@ -1,8 +1,10 @@
 # GAsecAgent
 
-GAsecAgent 是一个面向授权安全测试场景的中文自动化 Agent，组合了 OpenAI-compatible LLM、OpenAI Agents SDK、可选 RAG 知识库与真实 MCP 工具。
+GAsecAgent 是一个基于大语言模型（LLM）、RAG 与 MCP（Model Context Protocol）的中文自动化安全 Agent。
 
-项目保持单 Agent 架构。模型根据运行时发现的工具决定是否调用 MCP；工具结果由 Agents SDK 放回模型上下文，模型可以继续调用工具或生成最终回答：
+项目通过自然语言交互，让 LLM 根据任务自动选择并调用 MCP 工具，可用于授权安全测试、资产信息查询、安全分析和本地知识库增强等场景。
+
+基于 OpenAI Agents SDK 构建，支持 OpenAI-compatible 模型，并可通过 `mcp.json` 灵活扩展 MCP Server。
 
 ```text
 用户任务 -> LLM Agent -> MCP Tool -> Tool Result -> LLM Agent -> ... -> 最终回答
@@ -12,16 +14,14 @@ GAsecAgent 是一个面向授权安全测试场景的中文自动化 Agent，组
 
 ## 核心能力
 
-- 中文彩色 CLI、大型 ASCII Logo、多行输入、空行提交与流式回答
-- OpenAI-compatible Chat Completions 模型，以及 OpenAI Agents SDK 单 Agent 工具循环
-- 单次任务内连续工具调用；默认最多 10 个模型 turn
-- 进程内最多 50 轮 user/assistant 上下文；退出后不持久化
-- 可选 RAG：本地 UTF-8 文本、5000 字定长分块、无 overlap、NumPy 余弦相似度、Top-1 检索
-- Embedding 延迟初始化；关闭 RAG 时不需要 Embedding Key
-- stdio MCP 连接、动态工具发现、Tool Calling、Tool Result 回传及单服务器失败隔离
-- Tool Result 兼容字符串、JSON object/array、Python dict/list、MCP content blocks、structured content 与 error
-- `python main.py --check` 本地环境检查；不会连接 LLM、在线 API 或 MCP Server
-- `quit` / `退出`、Ctrl+C、EOF 优雅退出及 MCP 子进程清理
+- **自然语言交互**：通过中文自然语言向 Agent 下达安全分析与工具调用任务。
+- **Agent 工具调用**：基于 OpenAI Agents SDK，由模型自主选择并连续调用工具。
+- **MCP Server 集成**：通过 `mcp.json` 配置多个 MCP Server，支持动态工具发现与调用。
+- **安全工具接入**：已实现 Filesystem、Fscan、Tavily、FOFA 等 MCP 接入能力。
+- **多轮上下文**：支持进程内多轮对话，使 Agent 能结合前文继续完成任务。
+- **流式输出**：模型回答及工具调用过程以 CLI 形式实时展示。
+- **RAG 知识库增强**：可选加载本地知识库，通过 Embedding 与向量检索增强回答。
+- **模型可配置**：支持 OpenAI-compatible LLM，可配置模型、Base URL 和生成参数。
 
 ### MCP 接入
 
@@ -32,7 +32,7 @@ GAsecAgent 是一个面向授权安全测试场景的中文自动化 Agent，组
 | Tavily | 官方 `tavily-mcp@0.2.22` | `TAVILY_API_KEY` |
 | FOFA | 独立 FastMCP 适配器，调用 FOFA 官方 API | `FOFA_KEY` |
 
-项目没有 Planner、Evaluator、Replan、Multi-Agent、Web UI、REST API、向量数据库或长期 Memory。Nmap、SQLMap、Dirsearch、Gobuster 等工具也不属于 `v0.1.0`。
+`v0.1.0` 当前接入 Filesystem、Fscan、Tavily 和 FOFA，其他安全工具不在本版本范围内。
 
 ## 环境要求
 
@@ -195,24 +195,6 @@ set UV_CACHE_DIR=%CD%\.cache\uv
 - 在明确授权且隔离的测试环境中执行真实 Fscan 扫描。
 
 Fscan 二进制不随仓库分发。项目核验过的 v2.2.0 Windows x64 文件哈希与上游发布记录一致，但本机 Defender 将其识别为 HackTool；项目未关闭防护、添加排除项、强制恢复或执行该文件。哈希一致不等于安全背书。
-
-## 常见问题
-
-### `--check` 显示“配置存在但未连接”
-
-这是预期状态。`--check` 只执行本地检查，不启动 MCP Server。
-
-### Tavily 或 FOFA 显示“缺少 Key”
-
-两者都是可选增强项。在 `.env` 中填写自己的 `TAVILY_API_KEY` 或 `FOFA_KEY` 后重启即可。
-
-### Fscan 显示“缺少外部程序”
-
-仓库不分发扫描器二进制。请按 [Filesystem 与 Fscan](docs/FILESYSTEM_FSCAN.md) 核实来源和 SHA-256；不要为了运行而关闭 Defender 或恢复来源不明的文件。
-
-### 启动时提示没有可用 MCP Server
-
-至少确保 Filesystem MCP 已安装、入口文件存在且 `workspace` 目录有效。GAsecAgent 不会在零 MCP 状态下宣称已进入自动工具调用模式。
 
 ## License
 
