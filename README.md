@@ -22,6 +22,7 @@ GAsecAgent 是一个基于大语言模型（LLM）、RAG 与 MCP（Model Context
 - **流式输出**：模型回答及工具调用过程以 CLI 形式实时展示。
 - **RAG 知识库增强**：可选加载本地知识库，通过 Embedding 与向量检索增强回答。
 - **模型可配置**：支持 OpenAI-compatible LLM，可配置模型、Base URL 和生成参数。
+<img width="846" height="427" alt="GAsec1" src="https://github.com/user-attachments/assets/914979c1-c4bc-4bd7-910a-0f8d71181aa5" />
 
 ### MCP 接入
 
@@ -32,7 +33,7 @@ GAsecAgent 是一个基于大语言模型（LLM）、RAG 与 MCP（Model Context
 | Tavily | 官方 `tavily-mcp@0.2.22` | `TAVILY_API_KEY` |
 | FOFA | 独立 FastMCP 适配器，调用 FOFA 官方 API | `FOFA_KEY` |
 
-`v0.1.0` 当前接入 Filesystem、Fscan、Tavily 和 FOFA，其他安全工具不在本版本范围内。
+`v0.1.0` 当前已集成 Filesystem、Fscan、Tavily 和 FOFA，并支持通过 MCP 按需扩展更多安全工具与外部能力，例如 Nmap、Dirsearch、SQLMap、Gobuster 等。
 
 ## 环境要求
 
